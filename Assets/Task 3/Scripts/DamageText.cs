@@ -21,11 +21,10 @@ namespace Interview.Task3
                 transform.forward = Camera.main.transform.forward;
             }
 
-            // 2. Reset Alpha & Scale chuẩn
             Color c = _text.color;
             c.a = 1f;
             _text.color = c;
-            transform.localScale = Vector3.one * 1.5f; // Tăng Scale to hơn một chút để dễ nhìn trong World Space
+            transform.localScale = Vector3.one * 1.5f;
 
             _sequence?.Kill();
 

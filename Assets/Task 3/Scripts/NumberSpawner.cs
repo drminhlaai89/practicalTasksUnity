@@ -21,7 +21,6 @@ namespace Interview.Task3
             item.transform.position = finalPos;
             item.gameObject.SetActive(true);
 
-            // Setup animation và truyền callback trả về Pool khi hoàn thành
             item.Setup(damage, ReturnToPool);
         }
 
