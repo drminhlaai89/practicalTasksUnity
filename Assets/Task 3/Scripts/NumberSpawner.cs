@@ -12,9 +12,9 @@ namespace Interview.Task3
 
         public void SpawnDamageText(float damage, Vector3 spawnPosition)
         {
-            // Thêm random position offset
+
             Vector3 randomOffset = Random.insideUnitSphere * _randomOffset;
-            randomOffset.z = 0; // Giữ nguyên Z nếu là UI/2D plane
+            randomOffset.z = 0;
             Vector3 finalPos = spawnPosition + Vector3.up * 1.5f + randomOffset;
 
             DamageText item = GetFromPool();
