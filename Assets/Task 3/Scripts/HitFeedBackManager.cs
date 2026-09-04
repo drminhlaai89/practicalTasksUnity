@@ -13,9 +13,9 @@ namespace Interview.Task3
         [SerializeField] private NumbersSpawner _numbersSpawner;
         [SerializeField] private Image _hitFlashPanel;
 
-        [Header("VFX Feedback")]
-        [SerializeField] private ParticleSystem _impactVFX; // RoundHitBlue
-        [SerializeField] private ParticleSystem[] _bloodParticles; // BloodSplat 1, 2, 3
+        [Header("VFX Prefabs (Project Folder)")]
+        [SerializeField] private ParticleSystem _impactVFXPrefab;
+        [SerializeField] private ParticleSystem[] _bloodParticlePrefabs;
 
         private Camera _mainCamera;
 
@@ -46,16 +46,18 @@ namespace Interview.Task3
                 _animator.SetTrigger("GetHit");
             }
 
-            // 3. Impact VFX (RoundHitBlue)
-            if (_impactVFX != null)
+            // 3. Spawn Impact VFX Prefab tại vị trí ngực nhân vật
+            Vector3 spawnPos = _health.transform.position + Vector3.up * 1.0f;
+            if (_impactVFXPrefab != null)
             {
-                _impactVFX.Play();
+                ParticleSystem vfx = Instantiate(_impactVFXPrefab, spawnPos, Quaternion.identity);
+                Destroy(vfx.gameObject, vfx.main.duration + vfx.main.startLifetime.constantMax);
             }
 
-            // 4. Random Blood Splat VFX
-            PlayRandomBlood();
+            // 4. Spawn ngẫu nhiên 1 Blood Splat Prefab
+            SpawnRandomBloodPrefab(spawnPos);
 
-            // 5. Screen Hit Flash (Red Overlay)
+            // 5. Screen Hit Flash
             if (_hitFlashPanel != null)
             {
                 _hitFlashPanel.DOKill();
@@ -70,14 +72,17 @@ namespace Interview.Task3
             }
         }
 
-        private void PlayRandomBlood()
+        private void SpawnRandomBloodPrefab(Vector3 spawnPos)
         {
-            if (_bloodParticles != null && _bloodParticles.Length > 0)
+            if (_bloodParticlePrefabs != null && _bloodParticlePrefabs.Length > 0)
             {
-                int randomIndex = Random.Range(0, _bloodParticles.Length);
-                if (_bloodParticles[randomIndex] != null)
+                int randomIndex = Random.Range(0, _bloodParticlePrefabs.Length);
+                ParticleSystem prefab = _bloodParticlePrefabs[randomIndex];
+
+                if (prefab != null)
                 {
-                    _bloodParticles[randomIndex].Play();
+                    ParticleSystem blood = Instantiate(prefab, spawnPos, Quaternion.identity);
+                    Destroy(blood.gameObject, blood.main.duration + blood.main.startLifetime.constantMax);
                 }
             }
         }
